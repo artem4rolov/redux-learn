@@ -1,23 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+
+import TodoList from "./components/TodoList";
+import InputField from "./components/InputField";
+
+import "./App.css";
 
 function App() {
+  const [todos, setTodos] = useState([]);
+  const [text, setText] = useState("");
+
+  const addTodo = () => {
+    if (text.trim().length > 0) {
+      setTodos([
+        ...todos,
+        {
+          id: new Date().toISOString(),
+          text,
+          completed: false,
+        },
+      ]);
+      setText("");
+    }
+  };
+
+  const removeTodo = (id) => {
+    setTodos(todos.filter((item) => item.id !== id));
+  };
+
+  const toggleComplete = (id) => {
+    setTodos(
+      todos.map((todo) => {
+        if (todo.id !== id) {
+          return todo;
+        }
+        console.log(todos);
+        return { ...todo, completed: !todo.completed };
+      })
+    );
+  };
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <InputField handleInput={setText} handleSubmit={addTodo} text={text} />
+
+      <TodoList
+        todos={todos}
+        removeTodo={removeTodo}
+        toggleComplete={toggleComplete}
+      />
     </div>
   );
 }
