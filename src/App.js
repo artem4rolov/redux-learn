@@ -1,4 +1,6 @@
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { addTodo } from "./store/todoSlice";
 
 import TodoList from "./components/TodoList";
 import InputField from "./components/InputField";
@@ -6,48 +8,35 @@ import InputField from "./components/InputField";
 import "./App.css";
 
 function App() {
-  const [todos, setTodos] = useState([]);
   const [text, setText] = useState("");
+  const dispatch = useDispatch();
 
-  const addTodo = () => {
-    if (text.trim().length > 0) {
-      setTodos([
-        ...todos,
-        {
-          id: new Date().toISOString(),
-          text,
-          completed: false,
-        },
-      ]);
-      setText("");
-    }
+  const addTask = () => {
+    dispatch(addTodo({ text }));
+    setText("");
   };
 
   const removeTodo = (id) => {
-    setTodos(todos.filter((item) => item.id !== id));
+    // setTodos(todos.filter((item) => item.id !== id));
   };
 
   const toggleComplete = (id) => {
-    setTodos(
-      todos.map((todo) => {
-        if (todo.id !== id) {
-          return todo;
-        }
-        console.log(todos);
-        return { ...todo, completed: !todo.completed };
-      })
-    );
+    // setTodos(
+    //   todos.map((todo) => {
+    //     if (todo.id !== id) {
+    //       return todo;
+    //     }
+    //     console.log(todos);
+    //     return { ...todo, completed: !todo.completed };
+    //   })
+    // );
   };
 
   return (
     <div className="App">
-      <InputField handleInput={setText} handleSubmit={addTodo} text={text} />
+      <InputField handleInput={setText} handleSubmit={addTask} text={text} />
 
-      <TodoList
-        todos={todos}
-        removeTodo={removeTodo}
-        toggleComplete={toggleComplete}
-      />
+      <TodoList />
     </div>
   );
 }

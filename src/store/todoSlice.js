@@ -15,8 +15,15 @@ const todoSlice = createSlice({
         completed: false,
       });
     },
-    removeTodo(state, action) {},
-    toggleCompleted(state, action) {},
+    removeTodo(state, action) {
+      state.todos = state.todos.filter((deed) => deed.id !== action.payload.id);
+    },
+    toggleCompleted(state, action) {
+      const toggledTodo = state.todos.find(
+        (todo) => todo.id === action.payload.id
+      );
+      toggledTodo.completed = !toggledTodo.completed;
+    },
   },
 });
 
